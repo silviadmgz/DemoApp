@@ -1,4 +1,5 @@
 using DemoApp.Data;
+using DemoApp.DTOs;
 using DemoApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,16 +22,15 @@ public class DriversController : ControllerBase
     [HttpGet(Name = "GetAllDrivers")]
     public async Task<IActionResult> GetAllDrivers()
     {
-        var driver = new Driver()
-        {
-            DriverNumber = 44,
-            Name = "Silvia Dominguez"
-        };
-
-        _context.Add(driver);
-        await _context.SaveChangesAsync();
-
         var allDrivers = await _context.Drivers.ToListAsync();
         return Ok(allDrivers);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateDriver(CreateDriverRequest request)
+    {
+        _context.Add(request);
+        await _context.SaveChangesAsync();
+        return Ok();
     }
 }
